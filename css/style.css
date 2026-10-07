@@ -1,1 +1,19 @@
-/* Variables */ DUMMY PARA QUE GITHUB LO PUEDA LEER
+header{
+    display: flex;
+    flex: center;
+    justify-content: center;
+    font-size: small;
+    background-color: aquamarine;
+    color: blueviolet;
+    min-height: 100vh;
+}
+
+footer{
+    display: flex;
+    flex: center;
+    justify-content: center;
+    padding: 20px;
+    font-style: normal;
+    background-color: black;
+    color: rgb(183, 50, 70);
+}
