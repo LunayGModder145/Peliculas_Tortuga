@@ -12,30 +12,36 @@
          <h1>RESERVA TUS PELICULAS YA MISMO</h1>
     </header>
 <main>
-         <section id="PON PELICULA AQUI">
-           <h2>MIRA LAS PELICULAS</h2>
-            <form id>"Peliculas">
-            <label for="name">Titulo</label>
+         <section id="add-movie">
+           <h2>Añadir Nueva Pelicula</h2>
+            <form id="movie-form"></form>
+            <label for="titulo">Titulo</label>
             <input type="text" id="titulo" required>
-            <label for="name">Descripcion</label>
+
+            <label for="descripcion">Descripcion</label>
             <input type="text" id="descripcion" required>
-            <label for="name">Año</label>
-            <input type="text" id="año" required>
-            <label for="name">Genero</label>
-            <input type="text" id="genero" required>
-            <select id="CATEGORIAS" required
-             <option value="TITULO">Terror
-             <option value="TIPO">tipo
-             <option value="AÑO">año
-             <option value="GENERO">genero
+
+            <label for="año">Año</label>
+            <input type="text" id="anio" required>
+
+            <label for="urlFoto">URL de la foto:</label>
+            <input type="text" id="urlFoto" required>
+
+            <label for="genero">Género:</label>
+            <select id="genero" required>
+               <option value="acción">Acción</option>
+               <option value="terror">Terror</option> 
+               <option value="comedia">Comedia</option>
+               <option value="romance">Romance</option>  
             </select>
-                <button type="submit">Buscar</button>
-            </form>
-        </section>
-            
-        
-        
-    </section>
+
+            <button type="submit">Guardar Película</button>
+        </form>
+  </section>
+
+  <section id="movie-list">
+    <!-- Aquí mostraremos la tabla de películas dinámicamente con JS -->
+</section>
 </main>
     <footer>
     <h2>Todos los derechos reservados</h2>

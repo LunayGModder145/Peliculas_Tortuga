@@ -1,2 +1,64 @@
-////POR AHORA ESTA MADRE ES UN BOCETO NADA MAS OJO
+const movies [
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+  {
+   titulo:
+   descripcion:
+   anio:
+   urlFoto:
+   genero: 
+  },
+];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]
