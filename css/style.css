@@ -1,3 +1,6 @@
+/* ==========================================
+   1. Estilos Base y Layout General
+   ========================================== */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f7f6;
@@ -39,7 +42,9 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* Estructura limpia para el formulario */
+/* ==========================================
+   2. Formulario y Controles
+   ========================================== */
 #movie-form {
     display: flex;
     flex-direction: column;
@@ -85,7 +90,40 @@ form button:hover {
     background-color: #2980b9;
 }
 
-/* Estilos para la tabla de películas */
+/* [Esencial] Botón de cancelar edición (se muestra dinámicamente mediante la clase .active desde JS) */
+#cancel-edit-btn {
+    display: none;
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    margin-top: 10px;
+}
+
+#cancel-edit-btn.active {
+    display: inline-block;
+}
+
+#cancel-edit-btn:hover {
+    background-color: #616a6b;
+}
+
+/* ==========================================
+   3. Sección de Filtros de Búsqueda
+   ========================================== */
+.filter-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* ==========================================
+   4. Tabla de Películas
+   ========================================== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -108,7 +146,59 @@ tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* --- Arreglo del Footer --- */
+/* ==========================================
+   5. Clases inyectadas dinámicamente por JavaScript
+   ========================================== */
+.empty-msg {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+.poster-cell {
+    text-align: center;
+}
+
+.movie-poster {
+    width: 100px;
+    border-radius: 4px;
+}
+
+.actions-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.edit-btn {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #d68910;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ==========================================
+   6. Footer y Responsividad
+   ========================================== */
 footer {
     text-align: center;
     padding: 20px;
@@ -122,11 +212,11 @@ footer {
 footer h2 {
     color: #ecf0f1;
     font-size: 1.1rem;
-    border-bottom: none; /* Quitamos la línea para que quede limpio */
+    border-bottom: none;
     margin: 0;
 }
 
-/* --- Media Query para Responsividad (Móviles / Pantallas Pequeñas) --- */
+/* Media Query para adaptar la tabla y contenedores en pantallas móviles */
 @media (max-width: 768px) {
     main {
         max-width: 100%;
@@ -138,7 +228,6 @@ footer h2 {
         font-size: 1.4rem;
     }
 
-    /* Hacemos que la tabla tenga desplazamiento horizontal si es muy estrecha */
     table {
         display: block;
         overflow-x: auto;

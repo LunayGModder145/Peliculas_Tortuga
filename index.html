@@ -17,7 +17,7 @@
         <section id="add-movie">
             <h2 id="form-title">Añadir Nueva Película</h2>
             <form id="movie-form">
-                <input type="hidden" id="edit-index" value="-1"> <!-- Campo oculto para saber si editamos -->
+                <input type="hidden" id="edit-index" value="-1">
 
                 <div class="form-group">
                     <label for="titulo">Título:</label>
@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="anio">Año:</label>
-                    <input type="number" id="anio" required>
+                    <label for="año">Año:</label>
+                    <input type="number" id="año" required>
                 </div>
 
                 <div class="form-group">
@@ -50,20 +50,20 @@
                 </div>
 
                 <button type="submit" id="submit-btn">Guardar Película</button>
-                <button type="button" id="cancel-edit-btn" style="display: none; background-color: #7f8c8d;">Cancelar Edición</button>
+                <button type="button" id="cancel-edit-btn">Cancelar Edición</button>
             </form>
         </section>
 
-        <!-- Sección de Filtros (Género y Texto) -->
+        <!-- Sección de Filtros -->
         <section id="filter-section">
             <h2>Filtros de Búsqueda</h2>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <div class="form-group" style="flex: 1; min-width: 200px;">
-                    <label for="search-input">Buscar por título (Fase 2):</label>
+            <div class="filter-row">
+                <div class="form-group filter-item">
+                    <label for="search-input">Buscar por título:</label>
                     <input type="text" id="search-input" placeholder="Escribe para buscar...">
                 </div>
-                <div class="form-group" style="flex: 1; min-width: 200px;">
-                    <label for="filter-genero">Filtrar por género (Fase 1):</label>
+                <div class="form-group filter-item">
+                    <label for="filter-genero">Filtrar por género:</label>
                     <select id="filter-genero">
                         <option value="todos">Todos los géneros</option>
                         <option value="accion">Acción</option>
