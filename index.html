@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,42 +9,81 @@
 </head>
 <body>
     <header>
-         <h1>RESERVA TUS PELICULAS YA MISMO</h1>
+         <h1>EMPORIO DE PELICULAS TORTUGA</h1>
     </header>
-<main>
-         <section id="add-movie">
-           <h2>Añadir Nueva Pelicula</h2>
-            <form id="movie-form"></form>
-            <label for="titulo">Titulo</label>
-            <input type="text" id="titulo" required>
 
-            <label for="descripcion">Descripcion</label>
-            <input type="text" id="descripcion" required>
+    <main>
+        <!-- Formulario para añadir / editar película -->
+        <section id="add-movie">
+            <h2 id="form-title">Añadir Nueva Película</h2>
+            <form id="movie-form">
+                <input type="hidden" id="edit-index" value="-1"> <!-- Campo oculto para saber si editamos -->
 
-            <label for="año">Año</label>
-            <input type="text" id="anio" required>
+                <div class="form-group">
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" required>
+                </div>
 
-            <label for="urlFoto">URL de la foto:</label>
-            <input type="text" id="urlFoto" required>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <input type="text" id="descripcion" required>
+                </div>
 
-            <label for="genero">Género:</label>
-            <select id="genero" required>
-               <option value="acción">Acción</option>
-               <option value="terror">Terror</option> 
-               <option value="comedia">Comedia</option>
-               <option value="romance">Romance</option>  
-            </select>
+                <div class="form-group">
+                    <label for="anio">Año:</label>
+                    <input type="number" id="anio" required>
+                </div>
 
-            <button type="submit">Guardar Película</button>
-        </form>
-  </section>
+                <div class="form-group">
+                    <label for="urlFoto">URL de la foto:</label>
+                    <input type="text" id="urlFoto" required>
+                </div>
 
-  <section id="movie-list">
-    <!-- Aquí mostraremos la tabla de películas dinámicamente con JS -->
-</section>
-</main>
+                <div class="form-group">
+                    <label for="genero">Género:</label>
+                    <select id="genero" required>
+                        <option value="accion">Acción</option>
+                        <option value="terror">Terror</option>
+                        <option value="comedia">Comedia</option>
+                        <option value="romantica">Romántica</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="submit-btn">Guardar Película</button>
+                <button type="button" id="cancel-edit-btn" style="display: none; background-color: #7f8c8d;">Cancelar Edición</button>
+            </form>
+        </section>
+
+        <!-- Sección de Filtros (Género y Texto) -->
+        <section id="filter-section">
+            <h2>Filtros de Búsqueda</h2>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="search-input">Buscar por título (Fase 2):</label>
+                    <input type="text" id="search-input" placeholder="Escribe para buscar...">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="filter-genero">Filtrar por género (Fase 1):</label>
+                    <select id="filter-genero">
+                        <option value="todos">Todos los géneros</option>
+                        <option value="accion">Acción</option>
+                        <option value="terror">Terror</option>
+                        <option value="comedia">Comedia</option>
+                        <option value="romantica">Romántica</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenedor de la tabla -->
+        <section id="movie-container">
+        </section>
+    </main>
+
     <footer>
-    <h2>Todos los derechos reservados</h2>
+        <h2>Todos los derechos reservados</h2>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
