@@ -3,8 +3,8 @@
    ========================================== */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
+    background-color: #2ba97f;
+    color: #7acb6f;
     margin: 0;
     padding: 0;
 }
@@ -90,7 +90,7 @@ form button:hover {
     background-color: #2980b9;
 }
 
-/* [Esencial] Botón de cancelar edición (se muestra dinámicamente mediante la clase .active desde JS) */
+/* Botón de cancelar edición (se muestra dinámicamente mediante la clase .active desde JS) */
 #cancel-edit-btn {
     display: none;
     background-color: #7f8c8d;
@@ -147,7 +147,7 @@ tr:nth-child(even) {
 }
 
 /* ==========================================
-   5. Clases inyectadas dinámicamente por JavaScript
+   5. Clases inyectadas dinámicamente por JS
    ========================================== */
 .empty-msg {
     text-align: center;

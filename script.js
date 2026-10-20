@@ -1,6 +1,10 @@
-// Catálogo inicial de películas precargadas 
-// Se usó let en vez de const por cuestion de flexibilidad respecto a reasignación.
-// Al iniciar, intenta cargar desde el localStorage; si está vacío, usa el catálogo por defecto
+/**
+ * =================================================================use
+ * 1. ESTADO GLOBAL Y PERSISTENCIA (LOCALSTORAGE)
+ * =================================================================
+ */
+
+// Intenta cargar las películas desde el almacenamiento local; si está vacío, utiliza el catálogo inicial por defecto
 let movies = JSON.parse(localStorage.getItem("movies")) || [
   {
     titulo: "Buddy",
@@ -46,17 +50,27 @@ let movies = JSON.parse(localStorage.getItem("movies")) || [
   }
 ];
 
-// Guarda el estado actual del array de películas en el almacenamiento local del navegador
+/**
+ * Serializa y guarda el array actual de películas en el localStorage del navegador.
+ */
 function saveMovies() {
   localStorage.setItem("movies", JSON.stringify(movies));
 }
 
-// Cruza en tiempo real el texto de búsqueda y el género seleccionado del desplegable
+/**
+ * =================================================================
+ * 2. GESTIÓN DE FILTROS Y BÚSQUEDA
+ * =================================================================
+ */
+
+/**
+ * Cruza en tiempo real el texto de búsqueda y el género seleccionado del desplegable.
+ */
 function applyFilters() {
   const textQuery = document.getElementById("search-input").value.toLowerCase().trim();
   const genreQuery = document.getElementById("filter-genero").value.toLowerCase();
 
-  const filtered = movies.filter(movie => {  // Filtra el catálogo de forma combinada (por título y género) en tiempo real
+  const filtered = movies.filter(movie => {
     const matchesText = movie.titulo.toLowerCase().includes(textQuery);
     const matchesGenre = (genreQuery === "todos") || (movie.genero.toLowerCase() === genreQuery);
     return matchesText && matchesGenre;
@@ -65,7 +79,16 @@ function applyFilters() {
   renderMovieList(filtered);
 }
 
-// Esto renderiza dinámicamente la tabla HTML con las películas filtradas o muestra un mensaje vacío
+/**
+ * =================================================================
+ * 3. RENDERIZADO Y MANIPULACIÓN DEL DOM (TABLA Y ACCIONES)
+ * =================================================================
+ */
+
+/**
+ * Renderiza dinámicamente la tabla HTML con las películas filtradas o muestra un mensaje vacío.
+ * @param {Array} movieData - Lista de películas a mostrar.
+ */
 function renderMovieList(movieData) {
   const container = document.getElementById("movie-container");
   container.innerHTML = "";
@@ -112,18 +135,22 @@ function renderMovieList(movieData) {
   tableHTML += `</tbody></table>`;
   container.innerHTML = tableHTML;
 
-  // Asigna el evento de escucha para eliminar la película del array global y actualizar la vista
+         // EVENTOS:
+  // --- BORRAR PELÍCULA ---
   container.querySelectorAll(".delete-btn").forEach(button => {
     button.addEventListener("click", (e) => {
       const idx = e.target.getAttribute("data-index");
-      movies.splice(idx, 1);
-      saveMovies();
-      applyFilters();
+      
+      // Ventana emergente de confirmación antes de eliminar el registro
+      if (confirm("¿Estás seguro de que deseas eliminar esta película?")) {
+        movies.splice(idx, 1);
+        saveMovies();
+        applyFilters();
+      }
     });
   });
 
-  // Asigna el evento de escucha para cargar los datos de la película en el formulario y activar el modo edición
-  // En otras palabras, esto rellena el formulario automáticamente.
+  // --- EDITAR PELÍCULA (Cargar datos en el formulario) ---
   container.querySelectorAll(".edit-btn").forEach(button => {
     button.addEventListener("click", (e) => {
       const idx = e.target.getAttribute("data-index");
@@ -135,7 +162,7 @@ function renderMovieList(movieData) {
       document.getElementById("urlFoto").value = movie.urlFoto;
       document.getElementById("genero").value = movie.genero;
 
-      document.getElementById("edit-index").value = idx; // Esto guarda el indice oculto
+      document.getElementById("edit-index").value = idx;
       document.getElementById("form-title").textContent = "Editar Película";
       document.getElementById("submit-btn").textContent = "Actualizar Película";
       document.getElementById("cancel-edit-btn").classList.add("active");
@@ -145,7 +172,24 @@ function renderMovieList(movieData) {
   });
 }
 
-// Maneja el evento de envío del formulario para capturar los valores y procesar la actualización de una película
+/**
+ * =================================================================
+ * 4. MANEJO DEL FORMULARIO (ALTA Y ACTUALIZACIÓN)
+ * =================================================================
+ */
+
+/**
+ * Restablece el formulario a su estado original (modo creación) y oculta el botón de cancelar.
+ */
+function resetFormState() {
+  document.getElementById("edit-index").value = "-1";
+  document.getElementById("form-title").textContent = "Añadir Nueva Película";
+  document.getElementById("submit-btn").textContent = "Guardar Película";
+  document.getElementById("cancel-edit-btn").classList.remove("active");
+  document.getElementById("movie-form").reset();
+}
+
+// Evento de envío del formulario (gestiona tanto altas como actualizaciones)
 document.getElementById("movie-form").addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -156,19 +200,21 @@ document.getElementById("movie-form").addEventListener("submit", (event) => {
   const urlFoto = document.getElementById("urlFoto").value.trim();
   const genero = document.getElementById("genero").value;
 
-  // Valida que el año introducido cumpla con la regla de negocio (número de 4 cifras entre 1800 y 2026)
+  // Validación de la regla de negocio para el año (número de 4 cifras entre 1800 y 2026)
   if (isNaN(año) || año < 1800 || año > 2026 || String(año).length !== 4) {
     alert("Por favor, introduce un año válido de 4 cifras entre 1800 y 2026.");
     return;
   }
 
-  // Comprueba que los campos estén completos y decide si añade un registro nuevo o actualiza uno existente
+  // Comprueba que los campos obligatorios estén completos
   if (titulo && descripcion && urlFoto && genero) {
     const movieData = { titulo, descripcion, año, urlFoto, genero };
 
     if (editIndex === -1) {
+      // Caso: Añadir nueva película
       movies.push(movieData);
     } else {
+      // Caso: Actualizar película existente
       movies[editIndex] = movieData;
       resetFormState();
     }
@@ -179,21 +225,19 @@ document.getElementById("movie-form").addEventListener("submit", (event) => {
   }
 });
 
-// Restablece el formulario a su estado original para modo creación y oculta el botón de cancelar edición
-function resetFormState() {
-  document.getElementById("edit-index").value = "-1";
-  document.getElementById("form-title").textContent = "Añadir Nueva Película";
-  document.getElementById("submit-btn").textContent = "Guardar Película";
-  document.getElementById("cancel-edit-btn").classList.remove("active");
-  document.getElementById("movie-form").reset();
-}
-
+// Botón para cancelar el modo edición
 document.getElementById("cancel-edit-btn").addEventListener("click", resetFormState);
+
+/**
+ * =================================================================
+ * 5. INICIALIZACIÓN Y ESCUCHAS DE EVENTOS GLOBALES
+ * =================================================================
+ */
 
 document.getElementById("search-input").addEventListener("input", applyFilters);
 document.getElementById("filter-genero").addEventListener("change", applyFilters);
 
+// Renderiza la tabla inicial al cargar completamente el DOM de la página
 document.addEventListener("DOMContentLoaded", () => {
   applyFilters();
 });
-
