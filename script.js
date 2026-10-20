@@ -58,13 +58,13 @@ function saveMovies() {
 }
 
 /**
- * =================================================================
- * 2. GESTIÓN DE FILTROS Y BÚSQUEDA
- * =================================================================
+   =================================================================
+   2. GESTIÓN DE FILTROS Y BÚSQUEDA
+   =================================================================
  */
 
 /**
- * Cruza en tiempo real el texto de búsqueda y el género seleccionado del desplegable.
+   Cruza en tiempo real el texto de búsqueda y el género seleccionado del desplegable.
  */
 function applyFilters() {
   const textQuery = document.getElementById("search-input").value.toLowerCase().trim();
@@ -80,19 +80,20 @@ function applyFilters() {
 }
 
 /**
- * =================================================================
- * 3. RENDERIZADO Y MANIPULACIÓN DEL DOM (TABLA Y ACCIONES)
- * =================================================================
+   =================================================================
+   3. RENDERIZADO Y MANIPULACIÓN DEL DOM (TABLA Y ACCIONES)
+   =================================================================
  */
 
 /**
- * Renderiza dinámicamente la tabla HTML con las películas filtradas o muestra un mensaje vacío.
- * @param {Array} movieData - Lista de películas a mostrar.
+   Renderiza dinámicamente la tabla HTML con las películas filtradas o muestra un mensaje vacío.
+   @param {Array} movieData - Lista de películas a mostrar.
  */
 function renderMovieList(movieData) {
   const container = document.getElementById("movie-container");
   container.innerHTML = "";
 
+ // Esto funciona de esta forma: Si escribes algo que NO se ubica ni en el array por defecto ni lo añadiste tú por la web.
   if (movieData.length === 0) {
     container.innerHTML = "<p class='empty-msg'>No se encontraron películas.</p>";
     return;
@@ -123,7 +124,7 @@ function renderMovieList(movieData) {
         <td><b>${movie.titulo}</b></td>
         <td>${movie.descripcion}</td>
         <td>${movie.año}</td>
-        <td>${movie.genero}</td>
+        <td>${formatGenre(movie.genero)}</td>     //Esta pequeña línea corresponde al codigo para las mayúsculas 
         <td class="actions-cell">
           <button class="edit-btn" data-index="${realIndex}">Editar</button>
           <button class="delete-btn" data-index="${realIndex}">Borrar</button>
@@ -150,6 +151,19 @@ function renderMovieList(movieData) {
     });
   });
 
+/**
+ * Formatea el texto del género para mostrarlo con mayúscula y tilde en la interfaz.
+(Fué muy dificil el que en la etiqueta de generos de la web las primeras letras quedaran en mayus, así que fue necesario este codigo) */
+function formatGenre(genre) {
+  const genreMap = {
+    accion: "Acción",
+    terror: "Terror",
+    comedia: "Comedia",
+    romantica: "Romántica"
+  };
+  return genreMap[genre] || genre;
+}
+
   // --- EDITAR PELÍCULA (Cargar datos en el formulario) ---
   container.querySelectorAll(".edit-btn").forEach(button => {
     button.addEventListener("click", (e) => {
@@ -173,13 +187,13 @@ function renderMovieList(movieData) {
 }
 
 /**
- * =================================================================
- * 4. MANEJO DEL FORMULARIO (ALTA Y ACTUALIZACIÓN)
- * =================================================================
+   =================================================================
+   4. MANEJO DEL FORMULARIO (ALTA Y ACTUALIZACIÓN)
+   =================================================================
  */
 
 /**
- * Restablece el formulario a su estado original (modo creación) y oculta el botón de cancelar.
+   Restablece el formulario a su estado original (modo creación) y oculta el botón de cancelar.
  */
 function resetFormState() {
   document.getElementById("edit-index").value = "-1";
@@ -229,9 +243,9 @@ document.getElementById("movie-form").addEventListener("submit", (event) => {
 document.getElementById("cancel-edit-btn").addEventListener("click", resetFormState);
 
 /**
- * =================================================================
- * 5. INICIALIZACIÓN Y ESCUCHAS DE EVENTOS GLOBALES
- * =================================================================
+   =================================================================
+   5. INICIALIZACIÓN Y ESCUCHAS DE EVENTOS GLOBALES
+   =================================================================
  */
 
 document.getElementById("search-input").addEventListener("input", applyFilters);
@@ -241,3 +255,61 @@ document.getElementById("filter-genero").addEventListener("change", applyFilters
 document.addEventListener("DOMContentLoaded", () => {
   applyFilters();
 });
+
+  
+/* RESUMEN TÉCNICO:
+ 
+ 1. ¿Qué es un array en esta web?
+    - Es la lista ordenada de elementos (siendo la variable global 'movies').
+    - Almacena objetos JavaScript que representan cada película con sus propiedades:
+      { titulo, descripcion, año, urlFoto, genero }.
+    - Lo usamos para recorrer los datos con métodos como .filter(), añadir elementos con
+      .push(), eliminarlos con .splice() según su índice, y sincronizarlos con 
+     el almacenamiento local mediante JSON.stringify().
+  
+ 2. ¿Cómo está estructurado el formulario?
+    - Cuenta con un campo oculto ('edit-index') cuyo valor por defecto es "-1" (modo creación).
+      Si toma un valor numérico de índice, indica que estamos editando un registro existente.
+    - Contiene inputs de texto y numéricos para el título, descripción, año y URL de la foto,
+      además de un selector (<select>) controlado para el género.
+    - Posee dos botones principales: el de envío dinámico ("Guardar" o "Actualizar Película")
+      y el botón de cancelar edición, que solo se activa mediante la clase ".active".
+ 
+ 3. ¿Cúal es el flujo al clickear "Guardar Pelicula"?
+    - Se intercepta el evento submit predeterminado con event.preventDefault().
+    - Se leen y limpian los valores de los inputs, validando reglas de negocio (ej. el año).
+    - Se empaquetan los datos en un objeto y se evalúa el 'edit-index':
+        * Si es -1: Se añade al final del array con movies.push().
+        * Si es distinto de -1: Se sobrescribe la posición exacta movies[editIndex].
+    - Se llama a saveMovies() para actualizar el localStorage y a applyFilters() 
+      para redibujar la tabla de forma inmediata y reflejar los cambios en pantalla.
+ 
+ 4. ¿Cómo funciona el LocalStorage?
+    - Es una API que permite guardar datos en el navegador del usuario 
+      de forma persistente para que los datos no se borran así se cierre o recargue la pestaña).
+    - Como el localStorage solo guarda cadenas de texto (strings), utilizamos dos métodos clave:
+        * JSON.stringify(movies): Este convierte el array de objetos de JavaScript a formato texto 
+          antes de guardarlo.
+        * JSON.parse(...): Convierte de nuevo ese texto almacenado en un array de objetos 
+          legible para JavaScript al iniciar la aplicación.
+ 
+ 5. ¿Como funciona el sistema de películas y su flujo de datos?
+    - Estado Global (let movies): Mantiene la lista de películas activa en la memoria de la aplicación.
+    - Sincronización automática: Cada vez que se añade, edita o borra una película, se invoca 
+      inmediatamente la función saveMovies() para actualizar el localStorage.
+    - Renderizado dinámico (renderMovieList): Toma el array (ya sea completo o filtrado por 
+      la barra de búsqueda y el selector de género) y reconstruye por completo la estructura 
+      HTML de la tabla en tiempo real.
+  
+ 6. ¿Por qué usamos 'let' en vez de 'const' para el array de películas?
+  
+  - Reasignación total: 'let' permite que la variable 'movies' pueda ser reasignada 
+    por completo si fuera necesario (por ejemplo, al inicializarla con los datos 
+    del localStorage o establecer un array vacío/alternativo).
+  - Aunque 'const' permite modificar el contenido interno de un array (como añadir 
+    o borrar elementos con .push() o .splice()), 'let' nos otorga la flexibilidad 
+    de cambiar la referencia completa de la variable en memoria si el flujo de la 
+    aplicación lo requiere. */
+  
+ 
+ 
