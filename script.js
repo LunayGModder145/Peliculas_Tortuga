@@ -1,10 +1,13 @@
-/**
- * =================================================================use
- * 1. ESTADO GLOBAL Y PERSISTENCIA (LOCALSTORAGE)
- * =================================================================
+/*
+   =================================================================use
+   1. ESTADO GLOBAL Y PERSISTENCIA 
+   =================================================================
  */
 
-// Intenta cargar las películas desde el almacenamiento local; si está vacío, utiliza el catálogo inicial por defecto
+/* Intenta cargar las películas desde el almacenamiento local; si está vacío, utiliza el catálogo inicial por defecto
+   Por cuestiones de flexibilidad, usamos let en vez de const para el array de películas. De esta forma permitiendo la reasignacion
+   total de la variable en memoria (Si acaso necesitamos reasignarla por completo para iniciarla con el LocalStorage) */
+
 let movies = JSON.parse(localStorage.getItem("movies")) || [
   {
     titulo: "Buddy",
@@ -50,20 +53,20 @@ let movies = JSON.parse(localStorage.getItem("movies")) || [
   }
 ];
 
-/**
- * Serializa y guarda el array actual de películas en el localStorage del navegador.
+/*
+   Esta función guarda el array actual de películas en el localStorage del navegador:
  */
 function saveMovies() {
   localStorage.setItem("movies", JSON.stringify(movies));
 }
 
-/**
+/*
    =================================================================
    2. GESTIÓN DE FILTROS Y BÚSQUEDA
    =================================================================
  */
 
-/**
+/*
    Cruza en tiempo real el texto de búsqueda y el género seleccionado del desplegable.
  */
 function applyFilters() {
@@ -79,21 +82,24 @@ function applyFilters() {
   renderMovieList(filtered);
 }
 
-/**
+/*
    =================================================================
    3. RENDERIZADO Y MANIPULACIÓN DEL DOM (TABLA Y ACCIONES)
    =================================================================
  */
 
-/**
+/*
    Renderiza dinámicamente la tabla HTML con las películas filtradas o muestra un mensaje vacío.
-   @param {Array} movieData - Lista de películas a mostrar.
+   @param {Array} movieData - Esto quiere decir la lista de películas a mostrar.
+ 
+  "@param" le indica al editor de codigo que la función renderMovieList espera si o si un array (siendo de la lista de Películas)
  */
+
 function renderMovieList(movieData) {
   const container = document.getElementById("movie-container");
   container.innerHTML = "";
 
- // Esto funciona de esta forma: Si escribes algo que NO se ubica ni en el array por defecto ni lo añadiste tú por la web.
+ // Esto funciona de esta forma: Si escribes algo que NO se ubica ni en el array por defecto ni lo añadiste tú:
   if (movieData.length === 0) {
     container.innerHTML = "<p class='empty-msg'>No se encontraron películas.</p>";
     return;
@@ -124,7 +130,7 @@ function renderMovieList(movieData) {
         <td><b>${movie.titulo}</b></td>
         <td>${movie.descripcion}</td>
         <td>${movie.año}</td>
-        <td>${formatGenre(movie.genero)}</td>     //Esta pequeña línea corresponde al codigo para las mayúsculas 
+        <td>${formatGenre(movie.genero)}</td>     
         <td class="actions-cell">
           <button class="edit-btn" data-index="${realIndex}">Editar</button>
           <button class="delete-btn" data-index="${realIndex}">Borrar</button>
@@ -151,9 +157,9 @@ function renderMovieList(movieData) {
     });
   });
 
-/**
+/*
  * Formatea el texto del género para mostrarlo con mayúscula y tilde en la interfaz.
-(Fué muy dificil el que en la etiqueta de generos de la web las primeras letras quedaran en mayus, así que fue necesario este codigo) */
+(Fué imposible el que en la seccion de generos de la web las primeras letras quedaran en mayus, así que fue necesario este codigo) */
 function formatGenre(genre) {
   const genreMap = {
     accion: "Acción",
@@ -186,13 +192,13 @@ function formatGenre(genre) {
   });
 }
 
-/**
+/* 
    =================================================================
    4. MANEJO DEL FORMULARIO (ALTA Y ACTUALIZACIÓN)
    =================================================================
  */
 
-/**
+/* 
    Restablece el formulario a su estado original (modo creación) y oculta el botón de cancelar.
  */
 function resetFormState() {
@@ -242,7 +248,7 @@ document.getElementById("movie-form").addEventListener("submit", (event) => {
 // Botón para cancelar el modo edición
 document.getElementById("cancel-edit-btn").addEventListener("click", resetFormState);
 
-/**
+/*
    =================================================================
    5. INICIALIZACIÓN Y ESCUCHAS DE EVENTOS GLOBALES
    =================================================================
@@ -294,8 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
           legible para JavaScript al iniciar la aplicación.
  
  5. ¿Como funciona el sistema de películas y su flujo de datos?
-    - Estado Global (let movies): Mantiene la lista de películas activa en la memoria de la aplicación.
-    - Sincronización automática: Cada vez que se añade, edita o borra una película, se invoca 
+    - Estado Global: El "let movies" Mantiene la lista de películas activa en la memoria de la aplicación.
+    - Cada vez que se añade, edita o borra una película, se invoca 
       inmediatamente la función saveMovies() para actualizar el localStorage.
     - Renderizado dinámico (renderMovieList): Toma el array (ya sea completo o filtrado por 
       la barra de búsqueda y el selector de género) y reconstruye por completo la estructura 
